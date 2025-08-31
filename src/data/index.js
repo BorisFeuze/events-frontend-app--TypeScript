@@ -1,3 +1,4 @@
 import { getEvents } from "./events";
+import { signIn } from "./auth";
 
-export { getEvents };
+export { getEvents, signIn };
