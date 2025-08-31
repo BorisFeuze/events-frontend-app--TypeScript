@@ -3,14 +3,14 @@ import { useOutletContext } from "react-router";
 import { useEvent } from "../../context";
 
 const DisplayEvents = () => {
-  // const { events } = useOutletContext();
+  const { events } = useEvent();
   return (
     <div>
-      {/* {events.map((e) => {
+      {events.map((e) => {
         <Link to={`/events/${e.id}`} key={e.id}>
           <EventCard {...e} />
         </Link>;
-      })} */}
+      })}
     </div>
   );
 };
