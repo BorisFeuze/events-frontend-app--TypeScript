@@ -1,26 +1,31 @@
-import { Navigate } from "react-router";
+import { Navigate, Link } from "react-router";
 import { useState, useActionState } from "react";
 import { signIn } from "../data";
 import { toast } from "react-toastify";
 import { useAuthor } from "../context";
 
 const SignIn = () => {
-  const { handleSignIn, signedIn } = useAuthor();
-  const signinAction = async (prevState, form) => {
-    const email = form.get("email");
-    const password = form.get("password");
+  const { handleSignIn, signedIn, handleSignOut } = useAuthor();
 
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    console.log(e.target.value);
+  };
+
+  const handelSubmit = async (e) => {
+    e.preventDefault();
     try {
       if (!form.email.trim()) throw new Error("Email is required");
       if (!form.password.trim()) throw new Error("Password is required");
 
-      toast.success("Welcome back");
+      const signInResp = await signIn(form);
 
-      // console.log({ email, password });
-
-      const signInResp = await signIn({ email, password });
-
-      console.log(signInResp);
+      console.log(signInResp.token);
       handleSignIn(signInResp.token);
 
       return { error: null, success: true };
@@ -29,24 +34,13 @@ const SignIn = () => {
       return { error: null, success: false };
     }
   };
-  const [state, formAction, isPending] = useActionState(signinAction, {
-    error: null,
-    success: false,
-  });
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   if (signedIn) return <Navigate to="/events/new" />;
 
   return (
     <form
-      className="my-5 md:w-1/2 mx-auto flex flex-col gap-3 items-center"
-      action={formAction}
+      className="my-5 md:w-1/2 mx-auto flex flex-col gap-3 items-center text-black"
+      onSubmit={handelSubmit}
     >
       <div>
         <label className="input validator">
@@ -115,16 +109,13 @@ const SignIn = () => {
           At least one uppercase letter
         </p>
       </div>
-      <button className="btn" disabled={isPending}>
-        {isPending ? (
-          <>
-            <span className="loading loading-spinner"></span>
-            {Sign + "ing" - In}
-          </>
-        ) : (
-          Sign - In
-        )}
-      </button>
+      <button className="btn">Sign In</button>
+      <small>
+        Don&apos;t have an account?{" "}
+        <Link to="/sign-up" className="text-primary hover:underline">
+          Register!
+        </Link>
+      </small>
     </form>
   );
 };

@@ -14,7 +14,6 @@ const AuthorizContext = createContext();
 
 const useAuthor = () => {
   const context = use(AuthorizContext);
-  console.log(context);
   if (!context)
     throw new Error("useAuth must be used within an AuthContextProvider");
   return context;

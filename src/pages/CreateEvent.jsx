@@ -5,34 +5,31 @@ import { createEvent } from "../data";
 
 const CreateEvent = () => {
   const { events, setEvents } = useEvent();
-  const submitAction = async (prevState, formData) => {
-    const title = formData.get("title");
-    const description = formData.get("description");
-    const date = formData.get("date");
-    const location = formData.get("location");
-    const latitude = formData.get("latitude");
-    const longitude = formData.get("longitude");
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    date: "",
+    location: "",
+    latitude: "",
+    longitude: "",
+  });
 
-    const newEventData = {
-      title,
-      description,
-      date,
-      location,
-      latitude,
-      longitude,
-    };
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     try {
-      if (!formData.title.trim()) throw new Error("Title is required");
-      if (!formData.description.trim())
-        throw new Error("Description is required");
-      if (!formData.date.trim()) throw new Error("Date is required");
-      if (!formData.location.trim()) throw new Error("Location is required");
-      if (!formData.latitude.trim()) throw new Error("Latitude is required");
-      if (!formData.longitude.trim()) throw new Error("Longitude is required");
+      if (!form.title.trim()) throw new Error("Title is required");
+      if (!form.description.trim()) throw new Error("Description is required");
+      if (!form.date.trim()) throw new Error("Date is required");
+      if (!form.location.trim()) throw new Error("Location is required");
+      if (!form.latitude.trim()) throw new Error("Latitude is required");
+      if (!form.longitude.trim()) throw new Error("Longitude is required");
 
-      console.log(newEventData);
-      const newEvent = await createEvent(newEventData);
+      console.log(form);
+      const newEvent = await createEvent(form);
       setEvents((prev) => [...prev, newEvent]);
       setForm({
         title: "",
@@ -49,29 +46,14 @@ const CreateEvent = () => {
       return { error: null, success: false };
     }
   };
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    date: "",
-    location: "",
-    latitude: "",
-    longitude: "",
-  });
-  const [state, formAction, isPending] = useActionState(submitAction, {
-    error: null,
-    success: false,
-  });
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
   return (
-    <div className="bg-white flex justify-center mr-[5rem] py-6 text-black">
+    <div className="bg-white flex justify-center mx-[5rem] mt-[3rem] py-[2rem] text-black">
       <form
-        action={formAction}
+        onSubmit={handleSubmit}
         className="items-start flex flex-col gap-y-3 w-2/3"
       >
         <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms  text-center w-[5rem]">Title</span>
+          <span className="text-ms  text-center w-[8rem]">Title</span>
           <div className="w-full">
             <input
               onChange={handleChange}
@@ -81,13 +63,13 @@ const CreateEvent = () => {
               placeholder="Add a title"
               className="flex-1 border rounded px-2 py-2 text-sm w-full"
             />
-            {errors.title && (
+            {/* {errors.title && (
               <p className="text-red-500 text-sm">{errors.title}</p>
-            )}
+            )} */}
           </div>
         </label>
         <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[5rem]">Description</span>
+          <span className="text-ms text-center w-[8rem]">Description</span>
           <div className="w-full">
             <input
               onChange={handleChange}
@@ -97,13 +79,13 @@ const CreateEvent = () => {
               placeholder="Add a description"
               className="flex-1 border rounded px-2 py-2 text-sm w-full"
             />
-            {errors.description && (
+            {/* {errors.description && (
               <p className="text-red-500 text-sm">{errors.description}</p>
-            )}
+            )} */}
           </div>
         </label>
         <label className="flex flex-row  items-center justify-center w-full">
-          <span className="text-ms text-center w-[5rem]">Date</span>
+          <span className="text-ms text-center w-[8rem]">Date</span>
           <div className="w-full">
             <input
               onChange={handleChange}
@@ -112,66 +94,65 @@ const CreateEvent = () => {
               value={form.date}
               className="flex-1 border rounded px-2 py-2 text-sm w-full"
             />
-            {errors.imgUrl && (
+            {/* {errors.imgUrl && (
               <p className="text-red-500 text-sm">{errors.date}</p>
-            )}
+            )} */}
           </div>
         </label>
         <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[5rem]">Location</span>
+          <span className="text-ms text-center w-[8rem]">Location</span>
           <div className="w-full">
             <input
               onChange={handleChange}
               type="text"
               name="location"
               value={form.location}
-              placeholder="Add a image"
+              placeholder="Add a location"
               className="flex-1 border rounded px-2 py-2 text-sm w-full"
             />
-            {errors.message && (
+            {/* {errors.message && (
               <p className="text-red-500 text-sm">{errors.location}</p>
-            )}
+            )} */}
           </div>
         </label>
         <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[5rem]">Latitude</span>
+          <span className="text-ms text-center w-[8rem]">Latitude</span>
           <div className="w-full">
             <input
               onChange={handleChange}
               type="text"
               name="latitude"
-              value={formDiary.imgUrl}
-              placeholder="Add a image"
+              value={form.latitude}
+              placeholder="Add a latitude"
               className="flex-1 border rounded px-2 py-2 text-sm w-full"
             />
-            {errors.message && (
+            {/* {errors.message && (
               <p className="text-red-500 text-sm">{errors.latitude}</p>
-            )}
+            )} */}
           </div>
         </label>
         <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[5rem]">Longitude</span>
+          <span className="text-ms text-center w-[8rem]">Longitude</span>
           <div className="w-full">
             <input
               onChange={handleChange}
               type="text"
               name="longitude"
               value={form.longitude}
-              placeholder="Add a image"
+              placeholder="Add a longitude"
               className="flex-1 border rounded px-2 py-2 text-sm w-full"
             />
-            {errors.message && (
+            {/* {errors.message && (
               <p className="text-red-500 text-sm">{errors.longitude}</p>
-            )}
+            )} */}
           </div>
         </label>
         <div className="flex flex-row justify-center gap-x-10 ml-[3em] w-full">
           <button
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-            disabled={isPending}
           >
-            Add Diary
+            Add Event
           </button>
         </div>
       </form>

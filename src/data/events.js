@@ -37,9 +37,14 @@ const getSingleEvent = async (eventId, abortC) => {
 };
 
 const createEvent = async (newEvent) => {
+  const token = localStorage.getItem("token");
+
   const res = await fetch(`${API_URL}/events`, {
     method: "POST",
-    headers: { "Content-type": "application/json" },
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(newEvent),
   });
 

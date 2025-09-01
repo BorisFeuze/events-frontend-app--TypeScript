@@ -31,4 +31,20 @@ const me = async () => {
   return data;
 };
 
-export { signIn, me };
+const createUser = async (newUser) => {
+  const res = await fetch(`${API_URL}/users`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(newUser),
+  });
+
+  if (!res.ok) throw new Error(`${res.status}. Something went wrong!`);
+
+  const data = await res.json();
+
+  return data;
+};
+
+export { signIn, me, createUser };
