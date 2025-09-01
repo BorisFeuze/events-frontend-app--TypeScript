@@ -1,29 +1,34 @@
-import { useParams } from "react-router";
 import { useState, useEffect } from "react";
-import { useEvent } from "../context";
-import { getSingleEvent } from "../data/events";
+import { getSingleEvent } from "../data";
+import { useParams } from "react-router";
 
 const EventDetails = () => {
   const [currEvent, setCurrEvent] = useState({});
+
   const { id } = useParams();
+
+  console.log(id);
 
   useEffect(() => {
     const abortController = new AbortController();
-
     (async () => {
       try {
-        const event = await getSingleEvent(id, abortController);
-        console.log(event);
-        setCurrEvent(event);
+        const currEventData = await getSingleEvent(id, abortController);
+        console.log(currEventData);
+        setCurrEvent(currEventData);
       } catch (error) {
-        if (error.name !== "AbortError") {
+        if (error.name === "AbortError") {
+          console.info("Fetch Aborted");
+        } else {
           console.error(error);
         }
       }
     })();
-  }, []);
 
-  if (!currEvent) return <div>Sorry, no event found</div>;
+    return () => {
+      abortController.abort();
+    };
+  }, []);
   return (
     <div className="card card-border text-black bg-base-100 w-96">
       <div className="card-body">
