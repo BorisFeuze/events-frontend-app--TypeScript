@@ -1,20 +1,22 @@
 import { Outlet } from "react-router";
 import { ToastContainer } from "react-toastify";
 import { Navbar, Footer } from "../components";
-import { EventsProvider } from "../context";
+import { EventsProvider, AuthProvider } from "../context";
 
 const MainLayout = () => {
   return (
-    <EventsProvider>
-      <div>
+    <AuthProvider>
+      <div className="bg-slate-200 text-gray-100 flex flex-col min-h-screen">
         <Navbar />
-        <main>
-          <Outlet />
-        </main>
+        <EventsProvider>
+          <main className="flex-grow flex flex-col pt-[4.1rem]">
+            <Outlet />
+          </main>
+        </EventsProvider>
         <Footer />
         <ToastContainer position="top-center" />
       </div>
-    </EventsProvider>
+    </AuthProvider>
   );
 };
 

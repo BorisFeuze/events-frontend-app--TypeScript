@@ -4,14 +4,12 @@ import { getEvents } from "../data/index.js";
 
 const EventsProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
-  console.log(events);
   useEffect(() => {
     const abortController = new AbortController();
     (async () => {
       try {
         const eventData = await getEvents(abortController);
-        console.log(eventData);
-        setEvents(eventData);
+        setEvents(eventData.results);
       } catch (error) {
         if (error.name === "AbortError") {
           console.info("Fetch Aborted");

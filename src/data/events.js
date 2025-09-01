@@ -20,8 +20,6 @@ const getEvents = async (abortC) => {
 
   const data = await resp.json();
 
-  console.log(data);
-
   //gives data from popular movies back for using it in other function
   return data;
 };
@@ -38,4 +36,18 @@ const getSingleEvent = async (eventId, abortC) => {
   return data;
 };
 
-export { getEvents, getSingleEvent };
+const createEvent = async (newEvent) => {
+  const res = await fetch(`${API_URL}/events`, {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(newEvent),
+  });
+
+  if (!res.ok) throw new Error(`${res.status}. Something went wrong!`);
+
+  const data = await res.json();
+
+  return data;
+};
+
+export { getEvents, getSingleEvent, createEvent };
