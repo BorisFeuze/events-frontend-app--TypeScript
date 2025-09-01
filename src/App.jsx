@@ -1,38 +1,20 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import MainLayout from "./components/layouts/Mainlayout";
+import { SignIn, SignUp, CreateEvent, EventDetails } from "./components/pages";
 
-function Home() {
-  return <div className="p-6 text-xl">Home Page</div>;
-}
-function SignIn() {
-  return <div className="p-6 text-xl">Sign-In Page</div>;
-}
-function SignUp() {
-  return <div className="p-6 text-xl">Sign-Up Page</div>;
-}
-function CreateEvent() {
-  return <div className="p-6 text-xl">Create Event (Protected)</div>;
-}
-function EventDetails() {
-  return <div className="p-6 text-xl">Event Details</div>;
-}
-
-export default function App() {
+const App = () => {
   return (
-    <div>
-      <nav className="p-4 border-b flex gap-4">
-        <Link to="/">Home</Link>
-        <Link to="/sign-in">Sign In</Link>
-        <Link to="/sign-up">Sign Up</Link>
-        <Link to="/events/new">Create Event</Link>
-      </nav>
-
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<MainLayout />} />
+        <Route index element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/events/new" element={<CreateEvent />} />
         <Route path="/events/:id" element={<EventDetails />} />
       </Routes>
-    </div>
+    </BrowserRouter>
   );
-}
+};
+
+export default App;
