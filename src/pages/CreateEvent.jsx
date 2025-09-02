@@ -40,10 +40,8 @@ const CreateEvent = () => {
         longitude: "",
       });
       toast.success("There's a new Event added!");
-      return { error: null, success: true };
     } catch (error) {
       toast.error(error.message || "Something went wrong");
-      return { error: null, success: false };
     }
   };
   return (

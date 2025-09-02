@@ -27,11 +27,8 @@ const SignIn = () => {
 
       console.log(signInResp.token);
       handleSignIn(signInResp.token);
-
-      return { error: null, success: true };
     } catch (error) {
       toast.error(error.message || "Something went wrong!");
-      return { error: null, success: false };
     }
   };
 
