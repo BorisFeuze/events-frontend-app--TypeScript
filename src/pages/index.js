@@ -3,5 +3,6 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import CreateEvent from "./CreateEvent";
 import EventDetails from "./EventDetails";
+import NotFound from "./NotFound";
 
-export { Home, SignIn, SignUp, CreateEvent, EventDetails };
+export { Home, SignIn, SignUp, CreateEvent, EventDetails, NotFound };

@@ -1,6 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import { MainLayout, AuthLayout } from "./layouts";
-import { SignIn, SignUp, CreateEvent, EventDetails, Home } from "./pages";
+import {
+  SignIn,
+  SignUp,
+  CreateEvent,
+  EventDetails,
+  Home,
+  NotFound,
+} from "./pages";
 
 const App = () => {
   return (
@@ -14,6 +21,7 @@ const App = () => {
           <Route index element={<CreateEvent />} />
         </Route>
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

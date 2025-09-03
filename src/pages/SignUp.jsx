@@ -1,7 +1,7 @@
 import { Navigate } from "react-router";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { createUser } from "../data/auth";
+import { createUser } from "../data";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -9,6 +9,8 @@ const SignUp = () => {
     password: "",
     confpassword: "",
   });
+
+  const [newUser, setNewUser] = useState("");
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,20 +27,24 @@ const SignUp = () => {
       if (form.confpassword.trim() !== form.password.trim())
         throw new Error("confirm Password and Password must be the same");
 
+      const { email, password } = form;
+
+      const updateUser = await createUser({ email, password });
+
+      setNewUser(updateUser);
+
+      setForm({
+        email: "",
+        password: "",
+        confpassword: "",
+      });
       toast.success("you have been sucessfully register");
-
-      const newUser = { email, password };
-
-      const createUserResp = await createUser(newUser);
-
-      console.log(createUserResp);
-
-      return { error: null, success: true };
     } catch (error) {
       toast.error(error.message || "Something went wrong!");
-      return { error: null, success: false };
     }
   };
+
+  if (newUser) return <Navigate to="/sign-in" />;
 
   return (
     <form

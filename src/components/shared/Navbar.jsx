@@ -3,7 +3,7 @@ import { useAuthor } from "../../context";
 const Navbar = () => {
   const { handleSignOut, signedIn } = useAuthor();
   return (
-    <nav className="border-b flex gap-4 w-full fixed">
+    <nav className="border-b flex gap-4 w-full z-50  fixed">
       <div className="navbar bg-base-100 shadow-sm">
         <div className="navbar-start">
           <div className="dropdown">

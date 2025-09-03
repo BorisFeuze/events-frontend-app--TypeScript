@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useAuthor } from "../context";
 
 const SignIn = () => {
-  const { handleSignIn, signedIn, handleSignOut } = useAuthor();
+  const { handleSignIn, signedIn } = useAuthor();
 
   const [form, setForm] = useState({
     email: "",
@@ -27,11 +27,8 @@ const SignIn = () => {
 
       console.log(signInResp.token);
       handleSignIn(signInResp.token);
-
-      return { error: null, success: true };
     } catch (error) {
       toast.error(error.message || "Something went wrong!");
-      return { error: null, success: false };
     }
   };
 
