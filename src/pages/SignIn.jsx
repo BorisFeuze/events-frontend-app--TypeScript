@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useAuthor } from "../context";
 
 const SignIn = () => {
-  const { handleSignIn, signedIn, handleSignOut } = useAuthor();
+  const { handleSignIn, signedIn } = useAuthor();
 
   const [form, setForm] = useState({
     email: "",

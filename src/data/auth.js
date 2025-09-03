@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:3001/api/auth";
+const API_URL = "http://localhost:3001/api";
 
 const signIn = async (form) => {
-  const res = await fetch(`${API_URL}/login`, {
+  const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,7 +18,7 @@ const signIn = async (form) => {
 const me = async () => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/profile`, {
+  const res = await fetch(`${API_URL}/auth/profile`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

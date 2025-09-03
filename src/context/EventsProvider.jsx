@@ -10,7 +10,6 @@ const EventsProvider = ({ children }) => {
     (async () => {
       try {
         const eventData = await getEvents(abortController);
-        console.log(eventData.results);
         setEvents(eventData.results);
       } catch (error) {
         if (error.name === "AbortError") {

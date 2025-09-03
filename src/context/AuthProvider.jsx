@@ -25,7 +25,6 @@ const AuthProvider = ({ children }) => {
         const data = await me();
 
         setUser(data);
-        console.log(data);
         setSignedIn(true);
       } catch (error) {
         console.error(error);
