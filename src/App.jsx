@@ -1,19 +1,20 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import MainLayout from "./components/layouts/Mainlayout";
-import { SignIn, SignUp, CreateEvent, EventDetails } from "./components/pages";
+import { Routes, Route } from "react-router-dom";
+import { MainLayout, AuthLayout } from "./layouts";
+import { SignIn, SignUp, CreateEvent, EventDetails, Home } from "./pages";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />} />
+    <Routes>
+      <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/events/new" element={<CreateEvent />} />
         <Route path="/events/:id" element={<EventDetails />} />
-      </Routes>
-    </BrowserRouter>
+        <Route path="/events/new" element={<AuthLayout />}>
+          <Route index element={<CreateEvent />} />
+        </Route>
+      </Route>
+    </Routes>
   );
 };
 
