@@ -1,10 +1,14 @@
 import { useEvent } from "../context";
-import { useActionState, useState } from "react";
+import { useState } from "react"; // removed unused useActionState
 import { toast } from "react-toastify";
+
 import { createEvent } from "../data";
 
 const CreateEvent = () => {
-  const { events, setEvents } = useEvent();
+  const { events, setEvents } = useEvent(); // keep context state updates
+  const [loading, setLoading] = useState(false); // prevent double submit
+
+  // local form state
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -14,13 +18,18 @@ const CreateEvent = () => {
     longitude: "",
   });
 
+  // handle inputs
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  // submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
     try {
+      // basic required validations
       if (!form.title.trim()) throw new Error("Title is required");
       if (!form.description.trim()) throw new Error("Description is required");
       if (!form.date.trim()) throw new Error("Date is required");
@@ -28,9 +37,35 @@ const CreateEvent = () => {
       if (!form.latitude.trim()) throw new Error("Latitude is required");
       if (!form.longitude.trim()) throw new Error("Longitude is required");
 
-      console.log(form);
-      const newEvent = await createEvent(form);
+      // convert number fields
+      const lat = Number(form.latitude);
+      const lng = Number(form.longitude);
+      if (Number.isNaN(lat) || Number.isNaN(lng)) {
+        throw new Error("Latitude and Longitude must be valid numbers");
+      }
+
+      // convert date (input type="date" gives yyyy-mm-dd)
+      const isoDate = new Date(form.date).toISOString();
+
+      // payload expected by the API
+      const payload = {
+        title: form.title.trim(),
+        description: form.description.trim(),
+        date: isoDate,
+        location: form.location.trim(),
+        latitude: lat,
+        longitude: lng,
+      };
+
+      setLoading(true);
+
+      // POST /api/events with token is handled in createEvent()
+      const newEvent = await createEvent(payload);
+
+      // optimistic UI update
       setEvents((prev) => [...prev, newEvent]);
+
+      // reset form
       setForm({
         title: "",
         description: "",
@@ -39,121 +74,114 @@ const CreateEvent = () => {
         latitude: "",
         longitude: "",
       });
-      toast.success("There's a new Event added!");
+
+      toast.success("Event created successfully!");
     } catch (error) {
+      // show server/validation error
       toast.error(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-    <div className="bg-white flex justify-center mx-[5rem] mt-[3rem] py-[2rem] text-black">
-      <form
-        onSubmit={handleSubmit}
-        className="items-start flex flex-col gap-y-3 w-2/3"
-      >
-        <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms  text-center w-[8rem]">Title</span>
-          <div className="w-full">
+    <div className="bg-white text-black px-4 py-6">
+      {/* centered container with max width for better readability */}
+      <div className="mx-auto max-w-2xl">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {/* Title */}
+          <label className="flex items-center gap-3">
+            <span className="w-28 shrink-0 text-sm font-medium">Title</span>
             <input
               onChange={handleChange}
               type="text"
               name="title"
               value={form.title}
               placeholder="Add a title"
-              className="flex-1 border rounded px-2 py-2 text-sm w-full"
+              className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
-            {/* {errors.title && (
-              <p className="text-red-500 text-sm">{errors.title}</p>
-            )} */}
-          </div>
-        </label>
-        <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[8rem]">Description</span>
-          <div className="w-full">
+          </label>
+
+          {/* Description */}
+          <label className="flex items-center gap-3">
+            <span className="w-28 shrink-0 text-sm font-medium">
+              Description
+            </span>
             <input
               onChange={handleChange}
-              type="description"
+              type="text" // fixed from `type="description"`
               name="description"
               value={form.description}
               placeholder="Add a description"
-              className="flex-1 border rounded px-2 py-2 text-sm w-full"
+              className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
-            {/* {errors.description && (
-              <p className="text-red-500 text-sm">{errors.description}</p>
-            )} */}
-          </div>
-        </label>
-        <label className="flex flex-row  items-center justify-center w-full">
-          <span className="text-ms text-center w-[8rem]">Date</span>
-          <div className="w-full">
+          </label>
+
+          {/* Date */}
+          <label className="flex items-center gap-3">
+            <span className="w-28 shrink-0 text-sm font-medium">Date</span>
             <input
               onChange={handleChange}
               type="date"
               name="date"
               value={form.date}
-              className="flex-1 border rounded px-2 py-2 text-sm w-full"
+              className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
-            {/* {errors.imgUrl && (
-              <p className="text-red-500 text-sm">{errors.date}</p>
-            )} */}
-          </div>
-        </label>
-        <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[8rem]">Location</span>
-          <div className="w-full">
+          </label>
+
+          {/* Location */}
+          <label className="flex items-center gap-3">
+            <span className="w-28 shrink-0 text-sm font-medium">Location</span>
             <input
               onChange={handleChange}
               type="text"
               name="location"
               value={form.location}
               placeholder="Add a location"
-              className="flex-1 border rounded px-2 py-2 text-sm w-full"
+              className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
-            {/* {errors.message && (
-              <p className="text-red-500 text-sm">{errors.location}</p>
-            )} */}
-          </div>
-        </label>
-        <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[8rem]">Latitude</span>
-          <div className="w-full">
+          </label>
+
+          {/* Latitude */}
+          <label className="flex items-center gap-3">
+            <span className="w-28 shrink-0 text-sm font-medium">Latitude</span>
             <input
               onChange={handleChange}
-              type="text"
+              type="number" // numeric input with decimals
+              step="any"
               name="latitude"
               value={form.latitude}
-              placeholder="Add a latitude"
-              className="flex-1 border rounded px-2 py-2 text-sm w-full"
+              placeholder="e.g. 48.1351"
+              className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
-            {/* {errors.message && (
-              <p className="text-red-500 text-sm">{errors.latitude}</p>
-            )} */}
-          </div>
-        </label>
-        <label className="flex flex-row items-center justify-center w-full">
-          <span className="text-ms text-center w-[8rem]">Longitude</span>
-          <div className="w-full">
+          </label>
+
+          {/* Longitude */}
+          <label className="flex items-center gap-3">
+            <span className="w-28 shrink-0 text-sm font-medium">Longitude</span>
             <input
               onChange={handleChange}
-              type="text"
+              type="number" // numeric input with decimals
+              step="any"
               name="longitude"
               value={form.longitude}
-              placeholder="Add a longitude"
-              className="flex-1 border rounded px-2 py-2 text-sm w-full"
+              placeholder="e.g. 11.5820"
+              className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
-            {/* {errors.message && (
-              <p className="text-red-500 text-sm">{errors.longitude}</p>
-            )} */}
+          </label>
+
+          {/* Submit */}
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded shadow-sm hover:-translate-y-0.5 hover:shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Adding..." : "Add Event"}
+            </button>
           </div>
-        </label>
-        <div className="flex flex-row justify-center gap-x-10 ml-[3em] w-full">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-          >
-            Add Event
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
