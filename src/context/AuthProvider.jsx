@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { AuthorizContext } from ".";
 import { me } from "../data";
 
@@ -30,7 +31,7 @@ const AuthProvider = ({ children }) => {
         setUser(data);
         setSignedIn(true);
       } catch (error) {
-        console.error(error);
+        toast.error(error.message || "Something went wrong");
       } finally {
         setCheckSession(false); // Stop checking session after attempt
       }

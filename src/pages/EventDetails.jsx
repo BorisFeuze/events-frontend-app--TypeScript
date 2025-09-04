@@ -22,14 +22,15 @@ const EventDetails = () => {
         setCurrEvent(currEventData); // Update state with event data
       } catch (error) {
         if (error.name === "AbortError") {
-          console.info("Fetch Aborted");
+          toast.info("Fetch Aborted");
         } else {
-          console.error(error);
+          toast.error(error.message || "Something went wrong");
         }
       }
     })();
 
     // Cleanup: abort fetch if component unmounts
+
     return () => {
       abortController.abort();
     };

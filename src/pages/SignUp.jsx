@@ -13,6 +13,7 @@ const SignUp = () => {
 
   // Store newly created user (used to redirect later)
   const [newUser, setNewUser] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Update form state when user types
   const handleChange = (e) => {
@@ -23,6 +24,7 @@ const SignUp = () => {
   // Handle form submission
   const handelSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     try {
       // Basic validations
       if (!form.email.trim()) throw new Error("Email is required");
@@ -31,8 +33,11 @@ const SignUp = () => {
         throw new Error("Confirm Password is required");
       if (form.confpassword.trim() !== form.password.trim())
         throw new Error("Confirm Password and Password must be the same");
-
+      
       // Destructure data to send
+
+      setLoading(true);
+
       const { email, password } = form;
 
       // API call to create user

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { EventContext } from ".";
 import { getEvents } from "../data";
 
@@ -16,9 +17,9 @@ const EventsProvider = ({ children }) => {
         setEvents(eventData.results); // Save events in state
       } catch (error) {
         if (error.name === "AbortError") {
-          console.info("Fetch Aborted");
+          toast.info("Fetch Aborted");
         } else {
-          console.error(error);
+          toast.error(error.message || "Something went wrong");
         }
       }
     })();
