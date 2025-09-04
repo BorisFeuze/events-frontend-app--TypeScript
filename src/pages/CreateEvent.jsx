@@ -58,8 +58,6 @@ const CreateEvent = () => {
         longitude: lng,
       };
 
-      const { title } = form;
-
       setLoading(true);
 
       // POST /api/events with token is handled in createEvent()
