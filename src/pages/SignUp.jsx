@@ -11,6 +11,7 @@ const SignUp = () => {
   });
 
   const [newUser, setNewUser] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -19,6 +20,7 @@ const SignUp = () => {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     try {
       if (!form.email.trim()) throw new Error("Email is required");
       if (!form.password.trim()) throw new Error("Password is required");
@@ -26,6 +28,8 @@ const SignUp = () => {
         throw new Error("confirm Password is required");
       if (form.confpassword.trim() !== form.password.trim())
         throw new Error("confirm Password and Password must be the same");
+
+      setLoading(true);
 
       const { email, password } = form;
 

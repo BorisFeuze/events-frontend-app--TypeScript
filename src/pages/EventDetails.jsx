@@ -19,13 +19,12 @@ const EventDetails = () => {
         setCurrEvent(currEventData);
       } catch (error) {
         if (error.name === "AbortError") {
-          console.info("Fetch Aborted");
+          toast.info("Fetch Aborted");
         } else {
-          console.error(error);
+          toast.error(error.message || "Something went wrong");
         }
       }
     })();
-
     return () => {
       abortController.abort();
     };
