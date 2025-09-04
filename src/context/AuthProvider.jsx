@@ -4,33 +4,36 @@ import { AuthorizContext } from ".";
 import { me } from "../data";
 
 const AuthProvider = ({ children }) => {
+  // Track authentication state
   const [signedIn, setSignedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [checkSession, setCheckSession] = useState(true);
 
+  // Handle sign-in: save token and update state
   const handleSignIn = (token) => {
     localStorage.setItem("token", token);
     setSignedIn(true);
-    setCheckSession(true);
+    setCheckSession(true); // Trigger session check
   };
 
+  // Handle sign-out: clear token and reset state
   const handleSignOut = () => {
     localStorage.removeItem("token");
     setSignedIn(false);
     setUser(null);
   };
 
+  // On mount (or when checkSession changes), verify if user is logged in
   useEffect(() => {
     const getUser = async () => {
       try {
-        const data = await me();
-
+        const data = await me(); // Get user profile from API
         setUser(data);
         setSignedIn(true);
       } catch (error) {
         toast.error(error.message || "Something went wrong");
       } finally {
-        setCheckSession(false);
+        setCheckSession(false); // Stop checking session after attempt
       }
     };
 
