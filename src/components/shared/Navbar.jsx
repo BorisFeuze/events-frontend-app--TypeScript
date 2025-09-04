@@ -4,6 +4,14 @@ import { useAuthor } from "../../context";
 const Navbar = () => {
   const { handleSignOut, signedIn } = useAuthor();
 
+  // close dropdown after clicking a link
+  const handleCloseMenu = () => {
+    const activeElement = document.activeElement;
+    if (activeElement && activeElement.blur) {
+      activeElement.blur(); // close dropdown by removing focus
+    }
+  };
+
   return (
     <nav className="navbar fixed top-0 z-50 w-full bg-white/95 backdrop-blur border-b shadow-sm">
       {/* Left: brand + mobile menu */}
@@ -33,6 +41,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/"
+                onClick={handleCloseMenu}
                 className="btn btn-sm bg-slate-800 text-white hover:-translate-y-0.5 hover:shadow-md transition"
               >
                 Home
@@ -41,6 +50,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/events/new"
+                onClick={handleCloseMenu}
                 className="btn btn-sm bg-emerald-600 text-white hover:bg-emerald-700 hover:-translate-y-0.5 hover:shadow-md transition"
               >
                 Create Event
@@ -49,7 +59,10 @@ const Navbar = () => {
             <li>
               {signedIn ? (
                 <button
-                  onClick={handleSignOut}
+                  onClick={() => {
+                    handleSignOut();
+                    handleCloseMenu();
+                  }}
                   className="btn btn-sm bg-rose-600 text-white hover:bg-rose-700 hover:-translate-y-0.5 hover:shadow-md transition"
                 >
                   Sign out
@@ -57,6 +70,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   to="/sign-in"
+                  onClick={handleCloseMenu}
                   className="btn btn-sm bg-indigo-600 text-white hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-md transition"
                 >
                   Sign In
