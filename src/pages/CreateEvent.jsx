@@ -1,11 +1,12 @@
 import { useEvent } from "../context";
 import { useState } from "react"; // removed unused useActionState
 import { toast } from "react-toastify";
+import { Navigate } from "react-router";
 
 import { createEvent } from "../data";
 
 const CreateEvent = () => {
-  const { events, setEvents } = useEvent(); // keep context state updates
+  const [events, setEvents] = useState(""); // keep context state updates
   const [loading, setLoading] = useState(false); // prevent double submit
 
   // local form state
@@ -34,8 +35,8 @@ const CreateEvent = () => {
       if (!form.description.trim()) throw new Error("Description is required");
       if (!form.date.trim()) throw new Error("Date is required");
       if (!form.location.trim()) throw new Error("Location is required");
-      if (!form.latitude.trim()) throw new Error("Latitude is required");
-      if (!form.longitude.trim()) throw new Error("Longitude is required");
+      if (+!form.latitude.trim()) throw new Error("Latitude is required");
+      if (+!form.longitude.trim()) throw new Error("Longitude is required");
 
       // convert number fields
       const lat = Number(form.latitude);
@@ -56,6 +57,8 @@ const CreateEvent = () => {
         latitude: lat,
         longitude: lng,
       };
+
+      const { title } = form;
 
       setLoading(true);
 
@@ -83,6 +86,8 @@ const CreateEvent = () => {
       setLoading(false);
     }
   };
+
+  if (events) return <Navigate to="/" />;
 
   return (
     <div className="bg-white text-black px-4 py-6">
