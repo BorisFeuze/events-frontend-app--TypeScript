@@ -1,41 +1,22 @@
 import { Outlet } from "react-router";
 import { ToastContainer } from "react-toastify";
 import { Navbar, Footer } from "../components";
-import { getEvents } from "../data/events";
+import { EventsProvider, AuthProvider } from "../context";
 
 const MainLayout = () => {
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    (async () => {
-      try {
-        const eventData = await getAllDucks(abortController);
-        console.log(eventData);
-        setEvents(eventData);
-      } catch (error) {
-        if (error.name === "AbortError") {
-          console.info("Fetch Aborted");
-        } else {
-          console.error(error);
-        }
-      }
-    })();
-
-    return () => {
-      abortController.abort();
-    };
-  }, []);
-
   return (
-    <div>
-      <Navbar />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
-      <ToastContainer position="top-center" />
-    </div>
+    <AuthProvider>
+      <div className="bg-slate-200 text-gray-100 flex flex-col min-h-screen">
+        <Navbar />
+        <EventsProvider>
+          <main className="flex-grow flex flex-col pt-[4.1rem]">
+            <Outlet />
+          </main>
+        </EventsProvider>
+        <Footer />
+        <ToastContainer position="top-center" />
+      </div>
+    </AuthProvider>
   );
 };
 
