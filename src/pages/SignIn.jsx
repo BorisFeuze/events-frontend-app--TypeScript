@@ -1,47 +1,55 @@
-import { Navigate, Link } from "react-router";
-import { useState, useActionState } from "react";
-import { signIn } from "../data";
-import { toast } from "react-toastify";
-import { useAuthor } from "../context";
+import { Navigate, Link } from "react-router-dom"; // Correct import from react-router-dom
+import { useState } from "react";
+import { signIn } from "../data"; // API call function for login
+import { toast } from "react-toastify"; // For showing error messages
+import { useAuthor } from "../context"; // Custom context for authentication
 
 const SignIn = () => {
-  const { handleSignIn, signedIn, handleSignOut } = useAuthor();
+  const { handleSignIn, signedIn } = useAuthor(); // Context methods
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  // Local state for form fields
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false); // Loading state to disable button
 
+  // Handle input change for both email and password
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    console.log(e.target.value);
   };
 
-  const handelSubmit = async (e) => {
-    e.preventDefault();
+  // Handle form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page reload
+    if (loading) return; // Prevent multiple submits
+
     try {
+      // Basic validation before sending request
       if (!form.email.trim()) throw new Error("Email is required");
       if (!form.password.trim()) throw new Error("Password is required");
 
-      const signInResp = await signIn(form);
+      setLoading(true);
 
-      console.log(signInResp.token);
-      handleSignIn(signInResp.token);
+      // Call API to sign in
+      const { token } = await signIn(form);
 
-      return { error: null, success: true };
+      // Save token in context (and localStorage inside context)
+      handleSignIn(token);
     } catch (error) {
+      // Show error toast if login fails
       toast.error(error.message || "Something went wrong!");
-      return { error: null, success: false };
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
+  // If already signed in, redirect to create-event page
   if (signedIn) return <Navigate to="/events/new" />;
 
   return (
     <form
       className="my-5 md:w-1/2 mx-auto flex flex-col gap-3 items-center text-black"
-      onSubmit={handelSubmit}
+      onSubmit={handleSubmit}
     >
+      {/* Email input */}
       <div>
         <label className="input validator">
           <svg
@@ -66,11 +74,13 @@ const SignIn = () => {
             onChange={handleChange}
             type="email"
             placeholder="mail@site.com"
+            autoComplete="username"
             required
           />
         </label>
-        <div className="validator-hint hidden">Enter valid email address</div>
       </div>
+
+      {/* Password input */}
       <div>
         <label className="input validator">
           <svg
@@ -94,22 +104,20 @@ const SignIn = () => {
             value={form.password}
             onChange={handleChange}
             type="password"
-            required
             placeholder="Password"
-            minlength="8"
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+            autoComplete="current-password"
+            minLength={1} // Keep minimum for login, not strict like signup
+            required
           />
         </label>
-        <p className="validator-hint hidden">
-          Must be more than 8 characters, including
-          <br />
-          At least one number <br />
-          At least one lowercase letter <br />
-          At least one uppercase letter
-        </p>
       </div>
-      <button className="btn">Sign In</button>
+
+      {/* Submit button */}
+      <button type="submit" className="btn" disabled={loading}>
+        {loading ? "Signing in..." : "Sign In"}
+      </button>
+
+      {/* Link to register page */}
       <small>
         Don&apos;t have an account?{" "}
         <Link to="/sign-up" className="text-primary hover:underline">
