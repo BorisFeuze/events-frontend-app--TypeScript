@@ -1,4 +1,4 @@
-import { Navigate } from "react-router";
+import { Navigate, Link } from "react-router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { createUser } from "../data";
@@ -33,7 +33,7 @@ const SignUp = () => {
         throw new Error("Confirm Password is required");
       if (form.confpassword.trim() !== form.password.trim())
         throw new Error("Confirm Password and Password must be the same");
-      
+
       // Destructure data to send
 
       setLoading(true);
@@ -174,6 +174,12 @@ const SignUp = () => {
 
       {/* Submit button */}
       <button className="btn">Register</button>
+      <small className="text-center">
+        Already have an account?{" "}
+        <Link to="/sign-in" className="link link-primary">
+          Sign In
+        </Link>
+      </small>
     </form>
   );
 };
