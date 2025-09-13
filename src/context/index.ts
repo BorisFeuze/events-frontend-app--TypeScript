@@ -1,4 +1,4 @@
-import { createContext, use, useContext } from "react";
+import { createContext, use } from "react";
 import EventsProvider from "./EventsProvider";
 import AuthProvider from "./AuthProvider";
 
