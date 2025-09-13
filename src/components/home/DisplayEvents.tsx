@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useEvent } from "../../context";
+import { useEvent } from "../../context/index.js";
 import { EventCard } from "../index.js";
 
 const DisplayEvents = () => {
