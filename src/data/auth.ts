@@ -9,7 +9,7 @@ const signIn = async (form) => {
     },
     body: JSON.stringify(form), // Send login credentials
   });
-  if (!res.ok) throw new Error("Something went wrong!");
+  if (!res.ok) throw new Error("Something went wrong !");
 
   const data = await res.json();
   return data; // Returns token + user data

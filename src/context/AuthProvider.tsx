@@ -31,7 +31,7 @@ const AuthProvider = ({ children }) => {
         setUser(data);
         setSignedIn(true);
       } catch (error) {
-        toast.error(error.message || "Something went wrong");
+        toast.error(error.message || "Something went wrong ");
       } finally {
         setCheckSession(false); // Stop checking session after attempt
       }
