@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { getSingleEvent } from "../data";
 import { useParams, useNavigate } from "react-router";
+import type { Event } from "../types";
 
 const EventDetails = () => {
-  const [currEvent, setCurrEvent] = useState({});
+  const [currEvent, setCurrEvent] = useState<Event>({});
   const navigate = useNavigate();
   const { id } = useParams();
 

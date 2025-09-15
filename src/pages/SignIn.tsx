@@ -1,23 +1,24 @@
 import { Navigate, Link } from "react-router-dom"; // Correct import from react-router-dom
-import { useState } from "react";
+import { useState, type ChangeEventHandler } from "react";
 import { signIn } from "../data"; // API call function for login
 import { toast } from "react-toastify"; // For showing error messages
 import { useAuthor } from "../context"; // Custom context for authentication
+import type { SignInType } from "../types";
 
 const SignIn = () => {
   const { handleSignIn, signedIn } = useAuthor(); // Context methods
 
   // Local state for form fields
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState<SignInType>({ email: "", password: "" });
   const [loading, setLoading] = useState(false); // Loading state to disable button
 
   // Handle input change for both email and password
-  const handleChange = (e) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   // Handle form submit
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent page reload
     if (loading) return; // Prevent multiple submits
 
@@ -35,7 +36,9 @@ const SignIn = () => {
       handleSignIn(token);
     } catch (error) {
       // Show error toast if login fails
-      toast.error(error.message || "Something went wrong!");
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong!";
+      toast.error(errorMessage);
     } finally {
       setLoading(false); // Reset loading state
     }
