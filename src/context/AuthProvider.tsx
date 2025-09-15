@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { toast } from "react-toastify";
 import { AuthorizContext } from ".";
 import { me } from "../data";
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Track authentication state
   const [signedIn, setSignedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [checkSession, setCheckSession] = useState(true);
 
   // Handle sign-in: save token and update state
-  const handleSignIn = (token) => {
+  const handleSignIn = (token: string) => {
     localStorage.setItem("token", token);
     setSignedIn(true);
     setCheckSession(true); // Trigger session check
@@ -31,7 +31,9 @@ const AuthProvider = ({ children }) => {
         setUser(data);
         setSignedIn(true);
       } catch (error) {
-        toast.error(error.message || "Something went wrong ");
+        const errorMessage =
+          error instanceof Error ? error.message : "Something went wrong ";
+        toast.error(errorMessage);
       } finally {
         setCheckSession(false); // Stop checking session after attempt
       }

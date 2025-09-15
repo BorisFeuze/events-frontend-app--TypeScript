@@ -1,4 +1,6 @@
-const EventCard = ({ event }) => {
+import type { Event } from "../types";
+
+const EventCard = ({ event }: { event: Event }) => {
   const { title, description, location } = event;
   return (
     <div className="card card-border bg-base-100 w-96">

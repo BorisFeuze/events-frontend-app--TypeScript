@@ -7,8 +7,8 @@ const Navbar = () => {
   // close dropdown after clicking a link
   const handleCloseMenu = () => {
     const activeElement = document.activeElement;
-    if (activeElement && activeElement.blur) {
-      activeElement.blur(); // close dropdown by removing focus
+    if (activeElement && (activeElement as HTMLElement).blur) {
+      (activeElement as HTMLElement).blur(); // close dropdown by removing focus
     }
   };
 

@@ -1,8 +1,9 @@
 import { createContext, use } from "react";
 import EventsProvider from "./EventsProvider";
 import AuthProvider from "./AuthProvider";
+import type { EventContextType, AuthorizContextType } from "../types";
 
-const EventContext = createContext();
+const EventContext = createContext<EventContextType | undefined>(undefined);
 
 const useEvent = () => {
   const context = use(EventContext);
@@ -10,7 +11,9 @@ const useEvent = () => {
   return context;
 };
 
-const AuthorizContext = createContext();
+const AuthorizContext = createContext<AuthorizContextType | undefined>(
+  undefined
+);
 
 const useAuthor = () => {
   const context = use(AuthorizContext);
