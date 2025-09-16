@@ -14,11 +14,13 @@ type SignInType = {
 type EventContextType = {
   events: Event[];
   setEvents: Dispatch<SetStateAction<Event[]>>;
+  loading: boolean;
+  error: string | null;
 };
 
 type AuthorizContextType = {
   signedIn: boolean;
-  user: SignInType;
+  user: SignInType | null;
   handleSignIn: (token: string) => void;
   handleSignOut: () => void;
 };

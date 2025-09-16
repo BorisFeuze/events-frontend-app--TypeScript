@@ -1,5 +1,5 @@
 import { Navigate, Link } from "react-router";
-import { useState } from "react";
+import { useState, type ChangeEventHandler } from "react";
 import { toast } from "react-toastify";
 import { createUser } from "../data";
 
@@ -16,13 +16,13 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
 
   // Update form state when user types
-  const handleChange = (e) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(e.target.value);
   };
 
   // Handle form submission
-  const handelSubmit = async (e) => {
+  const handelSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
     try {
@@ -55,7 +55,9 @@ const SignUp = () => {
       toast.success("You have been successfully registered");
     } catch (error) {
       // Show error message if something fails
-      toast.error(error.message || "Something went wrong!");
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong";
+      toast.error(errorMessage);
     }
   };
 
@@ -124,7 +126,7 @@ const SignUp = () => {
             type="password"
             required
             placeholder="Password"
-            minLength="8"
+            minLength={8}
             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
             title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
           />
@@ -158,7 +160,7 @@ const SignUp = () => {
             type="password"
             required
             placeholder="Confirm Password"
-            minLength="8"
+            minLength={8}
             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
             title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
           />
