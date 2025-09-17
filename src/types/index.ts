@@ -25,6 +25,11 @@ type AuthorizContextType = {
   handleSignOut: () => void;
 };
 
+type Payload = Pick<
+  Event,
+  "title" | "description" | "date" | "location" | "latitude" | "longitude"
+>;
+
 type Event = z.infer<typeof EventSchema>;
 
 export type {
@@ -33,4 +38,5 @@ export type {
   SignInType,
   EventContextType,
   AuthorizContextType,
+  Payload,
 };

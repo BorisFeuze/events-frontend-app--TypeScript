@@ -2,6 +2,7 @@ import { useState, type ChangeEventHandler } from "react"; // removed unused use
 import { toast } from "react-toastify";
 import { Navigate } from "react-router";
 import { createEvent } from "../data";
+import type { Event, Payload } from "../types";
 
 const CreateEvent = () => {
   const [events, setEvents] = useState(""); // keep context state updates
@@ -47,7 +48,7 @@ const CreateEvent = () => {
       const isoDate = new Date(form.date).toISOString();
 
       // payload expected by the API
-      const payload = {
+      const payload: Payload = {
         title: form.title.trim(),
         description: form.description.trim(),
         date: isoDate,
