@@ -1,5 +1,5 @@
 import { EventSchemaArray, EventSchema } from "../schemas";
-import type { NewUser } from "../types";
+import type { Payload } from "../types";
 
 const API_URL = "http://localhost:3001/api";
 
@@ -34,7 +34,7 @@ const getEvents = async (abortC: AbortController) => {
   return data;
 };
 
-const getSingleEvent = async (eventId: number, abortC: AbortController) => {
+const getSingleEvent = async (eventId: string, abortC: AbortController) => {
   const res = await fetch(`${API_URL}/events/${eventId}`, {
     ...options,
     signal: abortC.signal,
@@ -53,7 +53,7 @@ const getSingleEvent = async (eventId: number, abortC: AbortController) => {
   return data;
 };
 
-const createEvent = async (newEvent: NewUser) => {
+const createEvent = async (newEvent: Payload) => {
   const token = localStorage.getItem("token");
 
   const res = await fetch(`${API_URL}/events`, {

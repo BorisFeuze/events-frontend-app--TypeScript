@@ -14,14 +14,21 @@ type SignInType = {
 type EventContextType = {
   events: Event[];
   setEvents: Dispatch<SetStateAction<Event[]>>;
+  loading: boolean;
+  error: string | null;
 };
 
 type AuthorizContextType = {
   signedIn: boolean;
-  user: SignInType;
+  user: SignInType | null;
   handleSignIn: (token: string) => void;
   handleSignOut: () => void;
 };
+
+type Payload = Pick<
+  Event,
+  "title" | "description" | "date" | "location" | "latitude" | "longitude"
+>;
 
 type Event = z.infer<typeof EventSchema>;
 
@@ -31,4 +38,5 @@ export type {
   SignInType,
   EventContextType,
   AuthorizContextType,
+  Payload,
 };

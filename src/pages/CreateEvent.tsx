@@ -1,9 +1,8 @@
-import { useEvent } from "../context";
-import { useState } from "react"; // removed unused useActionState
+import { useState, type ChangeEventHandler } from "react"; // removed unused useActionState
 import { toast } from "react-toastify";
 import { Navigate } from "react-router";
-
 import { createEvent } from "../data";
+import type { Event, Payload } from "../types";
 
 const CreateEvent = () => {
   const [events, setEvents] = useState(""); // keep context state updates
@@ -20,12 +19,12 @@ const CreateEvent = () => {
   });
 
   // handle inputs
-  const handleChange = (e) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   // submit handler
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
 
@@ -49,7 +48,7 @@ const CreateEvent = () => {
       const isoDate = new Date(form.date).toISOString();
 
       // payload expected by the API
-      const payload = {
+      const payload: Payload = {
         title: form.title.trim(),
         description: form.description.trim(),
         date: isoDate,
@@ -79,7 +78,9 @@ const CreateEvent = () => {
       toast.success("Event created successfully!");
     } catch (error) {
       // show server/validation error
-      toast.error(error.message || "Something went wrong");
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong ";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
