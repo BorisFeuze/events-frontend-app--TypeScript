@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { toast } from "react-toastify";
 import { EventContext } from ".";
 import { getEvents } from "../data";
+import type { Event } from "../types";
 
-const EventsProvider = ({ children }) => {
+const EventsProvider = ({ children }: { children: ReactNode }) => {
   // Store events in state
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();
