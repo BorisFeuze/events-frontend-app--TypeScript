@@ -1,3 +1,6 @@
+import { EventSchemaArray, EventSchema } from "../schemas";
+import type { Payload } from "../types";
+
 const API_URL = "http://localhost:3001/api";
 
 const options = {
@@ -7,7 +10,7 @@ const options = {
   },
 };
 
-const getEvents = async (abortC) => {
+const getEvents = async (abortC: AbortController) => {
   const resp = await fetch(`${API_URL}/events`, {
     ...options,
     signal: abortC.signal,
@@ -18,25 +21,39 @@ const getEvents = async (abortC) => {
       `${resp.status} .Something went wrong! Error ${resp.status}`
     );
 
-  const data = await resp.json();
+  const respData = await resp.json();
+
+  const { success, data, error } = EventSchemaArray.safeParse(respData.results);
+
+  if (!success) {
+    console.error(error.message);
+    throw new Error("Data validation failed");
+  }
 
   //gives data from popular movies back for using it in other function
   return data;
 };
 
-const getSingleEvent = async (eventId, abortC) => {
+const getSingleEvent = async (eventId: string, abortC: AbortController) => {
   const res = await fetch(`${API_URL}/events/${eventId}`, {
     ...options,
     signal: abortC.signal,
   });
   if (!res.ok) throw new Error(`${res.status}. Something went wrong!`);
 
-  const data = await res.json();
+  const resData = await res.json();
+
+  const { success, data, error } = EventSchema.safeParse(resData);
+
+  if (!success) {
+    console.error(error.message);
+    throw new Error("Data validation failed");
+  }
 
   return data;
 };
 
-const createEvent = async (newEvent) => {
+const createEvent = async (newEvent: Payload) => {
   const token = localStorage.getItem("token");
 
   const res = await fetch(`${API_URL}/events`, {
@@ -50,7 +67,14 @@ const createEvent = async (newEvent) => {
 
   if (!res.ok) throw new Error(`${res.status}. Something went wrong!`);
 
-  const data = await res.json();
+  const resData = await res.json();
+
+  const { success, data, error } = EventSchema.safeParse(resData);
+
+  if (!success) {
+    console.error(error.message);
+    throw new Error("Data validation failed");
+  }
 
   return data;
 };

@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { getSingleEvent } from "../data";
 import { useParams, useNavigate } from "react-router";
+import type { Event } from "../types";
+import { toast } from "react-toastify";
 
 const EventDetails = () => {
-  const [currEvent, setCurrEvent] = useState({});
+  const [currEvent, setCurrEvent] = useState<Event | null>(null);
   const navigate = useNavigate();
   const { id } = useParams();
+
+  if (!currEvent) return;
+  const { date, title, description, location, updatedAt } = currEvent;
 
   // Handle "Go Back" button, navigate to previous page
   const handleGoBack = () => {
@@ -18,13 +23,15 @@ const EventDetails = () => {
     // Fetch a single event by ID when component mounts
     (async () => {
       try {
-        const currEventData = await getSingleEvent(id, abortController);
+        const currEventData = await getSingleEvent(id ?? "", abortController);
         setCurrEvent(currEventData); // Update state with event data
       } catch (error) {
-        if (error.name === "AbortError") {
+        if (error instanceof Error && error.name === "AbortError") {
           toast.info("Fetch Aborted");
         } else {
-          toast.error(error.message || "Something went wrong");
+          const errorMessage =
+            error instanceof Error ? error.message : "Something went wrong";
+          toast.error(errorMessage);
         }
       }
     })();
@@ -41,13 +48,13 @@ const EventDetails = () => {
       <div className="card card-border text-black bg-base-100 w-96">
         <div className="card-body">
           {/* Event details */}
-          <p>{currEvent.date}</p>
-          <h2 className="card-title">{currEvent.title}</h2>
-          <p>{currEvent.description}</p>
+          <p>{date}</p>
+          <h2 className="card-title">{title}</h2>
+          <p>{description}</p>
           <div className="card-actions justify-end">
-            <p>{currEvent.location}</p>
+            <p>{location}</p>
           </div>
-          <p>{currEvent.updatedAt}</p>
+          <p>{updatedAt}</p>
 
           {/* Back button */}
           <button

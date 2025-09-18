@@ -1,7 +1,9 @@
+import type { NewUser, SignInType } from "../types";
+
 const API_URL = "http://localhost:3001/api";
 
 // Sign in user with email & password
-const signIn = async (form) => {
+const signIn = async (form: SignInType) => {
   const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -9,7 +11,7 @@ const signIn = async (form) => {
     },
     body: JSON.stringify(form), // Send login credentials
   });
-  if (!res.ok) throw new Error("Something went wrong!");
+  if (!res.ok) throw new Error("Something went wrong !");
 
   const data = await res.json();
   return data; // Returns token + user data
@@ -32,7 +34,7 @@ const me = async () => {
 };
 
 // Create a new user (register)
-const createUser = async (newUser) => {
+const createUser = async (newUser: NewUser) => {
   const res = await fetch(`${API_URL}/users`, {
     method: "POST",
     headers: {
