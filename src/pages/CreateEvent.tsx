@@ -5,7 +5,7 @@ import { createEvent } from "../data";
 import type { Payload } from "../types";
 
 const CreateEvent = () => {
-  const [events, setEvents] = useState<Payload[]>([]); // keep context state updates
+  const [events, setEvents] = useState<Payload | null>(null); // keep context state updates
   const [loading, setLoading] = useState(false); // prevent double submit
 
   // local form state
@@ -63,7 +63,7 @@ const CreateEvent = () => {
       const newEvent = await createEvent(payload);
 
       // optimistic UI update
-      setEvents((prev) => [...prev, newEvent]);
+      setEvents(newEvent);
 
       // reset form
       setForm({
