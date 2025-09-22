@@ -47,17 +47,15 @@ const Navbar = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                to="/events/new"
-                onClick={handleCloseMenu}
-                className="btn btn-sm bg-emerald-600 text-white hover:bg-emerald-700 hover:-translate-y-0.5 hover:shadow-md transition"
-              >
-                Create Event
-              </Link>
-            </li>
-            <li>
-              {signedIn ? (
+            {signedIn ? (
+              <li>
+                <Link
+                  to="/events/new"
+                  onClick={handleCloseMenu}
+                  className="btn btn-sm bg-emerald-600 text-white hover:bg-emerald-700 hover:-translate-y-0.5 hover:shadow-md transition"
+                >
+                  Create Event
+                </Link>
                 <button
                   onClick={() => {
                     handleSignOut();
@@ -67,7 +65,9 @@ const Navbar = () => {
                 >
                   Sign out
                 </button>
-              ) : (
+              </li>
+            ) : (
+              <li>
                 <Link
                   to="/sign-in"
                   onClick={handleCloseMenu}
@@ -75,8 +75,8 @@ const Navbar = () => {
                 >
                   Sign In
                 </Link>
-              )}
-            </li>
+              </li>
+            )}
           </ul>
         </div>
 
@@ -95,21 +95,21 @@ const Navbar = () => {
           >
             Home
           </Link>
-
-          <Link
-            to="/events/new"
-            className="btn bg-emerald-600 text-white hover:bg-emerald-700 hover:-translate-y-0.5 hover:shadow-md transition"
-          >
-            Create Event
-          </Link>
-
           {signedIn ? (
-            <button
-              onClick={handleSignOut}
-              className="btn bg-rose-600 text-white hover:bg-rose-700 hover:-translate-y-0.5 hover:shadow-md transition"
-            >
-              Sign out
-            </button>
+            <div>
+              <Link
+                to="/events/new"
+                className="btn bg-emerald-600 text-white hover:bg-emerald-700 hover:-translate-y-0.5 hover:shadow-md transition"
+              >
+                Create Event
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="btn bg-rose-600 text-white hover:bg-rose-700 hover:-translate-y-0.5 hover:shadow-md transition"
+              >
+                Sign out
+              </button>
+            </div>
           ) : (
             <Link
               to="/sign-in"

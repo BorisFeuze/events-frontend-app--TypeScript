@@ -9,8 +9,7 @@ const EventDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  if (!currEvent) return;
-  const { date, title, description, location, updatedAt } = currEvent;
+  console.log(id);
 
   // Handle "Go Back" button, navigate to previous page
   const handleGoBack = () => {
@@ -42,6 +41,9 @@ const EventDetails = () => {
       abortController.abort();
     };
   }, []);
+
+  if (!currEvent) return;
+  const { date, title, description, location, updatedAt } = currEvent;
 
   return (
     <div className="flex flex-row justify-center pt-[7rem]">

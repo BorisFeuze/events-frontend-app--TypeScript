@@ -22,6 +22,7 @@ const getEvents = async (abortC: AbortController) => {
     );
 
   const respData = await resp.json();
+  console.log(respData);
 
   const { success, data, error } = EventSchemaArray.safeParse(respData.results);
 
@@ -49,7 +50,7 @@ const getSingleEvent = async (eventId: string, abortC: AbortController) => {
     console.error(error.message);
     throw new Error("Data validation failed");
   }
-
+  console.log(data);
   return data;
 };
 
